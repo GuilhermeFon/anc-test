@@ -22,8 +22,13 @@ python generate_secret_key.py
 # Criar banco de dados
 python manage.py migrate
 
-# Criar superusuário
-python manage.py createsuperuser
+# Criar dados iniciais (raças)
+python setup_initial_data.py
+
+# Criar usuários de teste
+python create_test_users.py
+# Admin: admin/admin123 (Cartório)
+# Produtor: produtor/produtor123
 ```
 
 ## Como Executar
