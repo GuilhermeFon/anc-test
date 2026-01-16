@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Propriedades - Cartório Rural{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>🏡 Propriedades Cadastradas</h1>
+    <a href="{% url 'core:propriedade_create' %}" class="btn btn-success">➕ Nova Propriedade</a>
+</div>
+
+{% if propriedades %}
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Nome</th>
+                    <th>Município</th>
+                    <th>Produtor</th>
+                    <th width="250">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for propriedade in propriedades %}
+                <tr>
+                    <td>{{ propriedade.nome }}</td>
+                    <td>{{ propriedade.municipio }}</td>
+                    <td>{{ propriedade.usuario.get_full_name|default:propriedade.usuario.username }}</td>
+                    <td>
+                        <a href="{% url 'core:propriedade_update' propriedade.pk %}" class="btn btn-sm btn-warning">✏️ Editar</a>
+                        <a href="{% url 'core:propriedade_delete' propriedade.pk %}" class="btn btn-sm btn-danger">🗑️ Excluir</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <div class="alert alert-info">
+        Nenhuma propriedade cadastrada ainda.
+    </div>
+{% endif %}
+{% endblock %}

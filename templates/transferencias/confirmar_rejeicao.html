@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Confirmar Rejeição - Cartório Rural{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <h1>❌ Confirmar Rejeição</h1>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="alert alert-warning">
+            <h5>Confirmar rejeição da transferência?</h5>
+            <p><strong>Galinha:</strong> {{ transferencia.galinha.numero_registro }} - {{ transferencia.galinha.nome }}</p>
+            <p><strong>De:</strong> {{ transferencia.origem.nome }}</p>
+            <p><strong>Para:</strong> {{ transferencia.destino.nome }}</p>
+        </div>
+        
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="observacao" class="form-label">Observação (opcional):</label>
+                <textarea name="observacao" id="observacao" class="form-control" rows="3" 
+                          placeholder="Motivo da rejeição..."></textarea>
+            </div>
+            
+            <button type="submit" class="btn btn-danger">❌ Sim, rejeitar</button>
+            <a href="{% url 'transferencias:transferencia_detail_cartorio' transferencia.pk %}" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

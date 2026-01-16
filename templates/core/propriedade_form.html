@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if object %}Editar{% else %}Nova{% endif %} Propriedade - Cartório Rural{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <h1>{% if object %}✏️ Editar Propriedade{% else %}➕ Nova Propriedade{% endif %}</h1>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        {{ form.nome.label_tag }}
+                        {{ form.nome }}
+                        {% if form.nome.errors %}
+                            <div class="text-danger">{{ form.nome.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ form.municipio.label_tag }}
+                        {{ form.municipio }}
+                        {% if form.municipio.errors %}
+                            <div class="text-danger">{{ form.municipio.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ form.usuario.label_tag }}
+                        {{ form.usuario }}
+                        {% if form.usuario.errors %}
+                            <div class="text-danger">{{ form.usuario.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <button type="submit" class="btn btn-success">💾 Salvar</button>
+                    <a href="{% url 'core:propriedade_list' %}" class="btn btn-secondary">Cancelar</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

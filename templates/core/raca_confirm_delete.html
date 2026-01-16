@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Excluir Raça - Cartório Rural{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <h1>🗑️ Excluir Raça</h1>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="alert alert-warning">
+            <h5>⚠️ Atenção!</h5>
+            <p>Tem certeza que deseja excluir a raça <strong>{{ object.nome }}</strong>?</p>
+            <p>Esta ação não pode ser desfeita e pode impedir a exclusão se houver galinhas cadastradas com esta raça.</p>
+        </div>
+        
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">🗑️ Sim, excluir</button>
+            <a href="{% url 'core:raca_list' %}" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

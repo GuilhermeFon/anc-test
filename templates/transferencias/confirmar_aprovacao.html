@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Confirmar Aprovação - Cartório Rural{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <h1>✅ Confirmar Aprovação</h1>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="alert alert-info">
+            <h5>Confirmar aprovação da transferência?</h5>
+            <p><strong>Galinha:</strong> {{ transferencia.galinha.numero_registro }} - {{ transferencia.galinha.nome }}</p>
+            <p><strong>De:</strong> {{ transferencia.origem.nome }}</p>
+            <p><strong>Para:</strong> {{ transferencia.destino.nome }}</p>
+            <p class="mb-0">Ao aprovar, a propriedade atual da galinha será automaticamente atualizada.</p>
+        </div>
+        
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-success">✅ Sim, aprovar</button>
+            <a href="{% url 'transferencias:transferencia_detail_cartorio' transferencia.pk %}" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

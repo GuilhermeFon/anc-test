@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block title %}Transferências - Cartório Rural{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>🔄 Transferências de Propriedade</h1>
+</div>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <div class="btn-group" role="group">
+            <a href="{% url 'transferencias:transferencia_list_cartorio' %}" 
+               class="btn {% if not status_filter %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                Todas
+            </a>
+            <a href="{% url 'transferencias:transferencia_list_cartorio' %}?status=PENDENTE" 
+               class="btn {% if status_filter == 'PENDENTE' %}btn-warning{% else %}btn-outline-warning{% endif %}">
+                Pendentes {% if pendentes_count %}({{ pendentes_count }}){% endif %}
+            </a>
+            <a href="{% url 'transferencias:transferencia_list_cartorio' %}?status=APROVADO" 
+               class="btn {% if status_filter == 'APROVADO' %}btn-success{% else %}btn-outline-success{% endif %}">
+                Aprovadas
+            </a>
+            <a href="{% url 'transferencias:transferencia_list_cartorio' %}?status=REJEITADO" 
+               class="btn {% if status_filter == 'REJEITADO' %}btn-danger{% else %}btn-outline-danger{% endif %}">
+                Rejeitadas
+            </a>
+        </div>
+    </div>
+</div>
+
+{% if transferencias %}
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Galinha</th>
+                    <th>Origem</th>
+                    <th>Destino</th>
+                    <th>Data Solicitação</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for transferencia in transferencias %}
+                <tr>
+                    <td>{{ transferencia.id }}</td>
+                    <td>{{ transferencia.galinha.numero_registro }}</td>
+                    <td>{{ transferencia.origem.nome }}</td>
+                    <td>{{ transferencia.destino.nome }}</td>
+                    <td>{{ transferencia.data_solicitacao|date:"d/m/Y H:i" }}</td>
+                    <td>
+                        {% if transferencia.status == 'PENDENTE' %}
+                            <span class="badge bg-warning">{{ transferencia.get_status_display }}</span>
+                        {% elif transferencia.status == 'APROVADO' %}
+                            <span class="badge bg-success">{{ transferencia.get_status_display }}</span>
+                        {% else %}
+                            <span class="badge bg-danger">{{ transferencia.get_status_display }}</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'transferencias:transferencia_detail_cartorio' transferencia.pk %}" 
+                           class="btn btn-sm btn-info">👁️ Ver</a>
+                        {% if transferencia.status == 'PENDENTE' %}
+                            <a href="{% url 'transferencias:aprovar_transferencia' transferencia.pk %}" 
+                               class="btn btn-sm btn-success">✅ Aprovar</a>
+                            <a href="{% url 'transferencias:rejeitar_transferencia' transferencia.pk %}" 
+                               class="btn btn-sm btn-danger">❌ Rejeitar</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <div class="alert alert-info">
+        Nenhuma transferência encontrada.
+    </div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block title %}Detalhes da Transferência - Cartório Rural{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>🔄 Transferência #{{ transferencia.id }}</h1>
+    <a href="{% url 'transferencias:transferencia_list_cartorio' %}" class="btn btn-secondary">← Voltar</a>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card mb-3">
+            <div class="card-header 
+                {% if transferencia.status == 'PENDENTE' %}bg-warning
+                {% elif transferencia.status == 'APROVADO' %}bg-success text-white
+                {% else %}bg-danger text-white{% endif %}">
+                <h5 class="mb-0">Status: {{ transferencia.get_status_display }}</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-borderless">
+                    <tr>
+                        <th width="40%">Galinha:</th>
+                        <td>
+                            <a href="{% url 'core:galinha_detail' transferencia.galinha.pk %}">
+                                {{ transferencia.galinha.numero_registro }} - {{ transferencia.galinha.nome }}
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Propriedade de Origem:</th>
+                        <td>{{ transferencia.origem.nome }} - {{ transferencia.origem.municipio }}</td>
+                    </tr>
+                    <tr>
+                        <th>Propriedade de Destino:</th>
+                        <td>{{ transferencia.destino.nome }} - {{ transferencia.destino.municipio }}</td>
+                    </tr>
+                    <tr>
+                        <th>Produtor:</th>
+                        <td>{{ transferencia.origem.usuario.get_full_name|default:transferencia.origem.usuario.username }}</td>
+                    </tr>
+                    <tr>
+                        <th>Data da Solicitação:</th>
+                        <td>{{ transferencia.data_solicitacao|date:"d/m/Y H:i" }}</td>
+                    </tr>
+                    {% if transferencia.data_processamento %}
+                    <tr>
+                        <th>Data do Processamento:</th>
+                        <td>{{ transferencia.data_processamento|date:"d/m/Y H:i" }}</td>
+                    </tr>
+                    {% endif %}
+                    {% if transferencia.observacao %}
+                    <tr>
+                        <th>Observação:</th>
+                        <td>{{ transferencia.observacao }}</td>
+                    </tr>
+                    {% endif %}
+                </table>
+                
+                {% if transferencia.status == 'PENDENTE' %}
+                    <div class="mt-4">
+                        <a href="{% url 'transferencias:aprovar_transferencia' transferencia.pk %}" 
+                           class="btn btn-success">✅ Aprovar Transferência</a>
+                        <a href="{% url 'transferencias:rejeitar_transferencia' transferencia.pk %}" 
+                           class="btn btn-danger">❌ Rejeitar Transferência</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ galinha.nome }} - Cartório Rural{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>🐔 {{ galinha.nome }}</h1>
+    <div>
+        <a href="{% if user.is_cartorio %}{% url 'core:galinha_list' %}{% else %}{% url 'core:galinha_list_produtor' %}{% endif %}" class="btn btn-secondary">← Voltar</a>
+        {% if user.is_cartorio %}
+            <a href="{% url 'core:galinha_update' galinha.pk %}" class="btn btn-warning">✏️ Editar</a>
+            <a href="{% url 'certidoes:emitir_certidao' galinha.pk %}" class="btn btn-primary">📄 Emitir Certidão</a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card mb-3">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Informações Básicas</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-borderless">
+                    <tr>
+                        <th width="40%">Número de Registro:</th>
+                        <td><strong>{{ galinha.numero_registro }}</strong></td>
+                    </tr>
+                    <tr>
+                        <th>Nome:</th>
+                        <td>{{ galinha.nome }}</td>
+                    </tr>
+                    <tr>
+                        <th>Sexo:</th>
+                        <td>{{ galinha.get_sexo_display }}</td>
+                    </tr>
+                    <tr>
+                        <th>Data de Nascimento:</th>
+                        <td>{{ galinha.data_nascimento|date:"d/m/Y" }} ({{ galinha.get_idade_anos }} anos)</td>
+                    </tr>
+                    <tr>
+                        <th>Raça:</th>
+                        <td>{{ galinha.raca.nome }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">Propriedade</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-borderless">
+                    <tr>
+                        <th width="40%">Propriedade Atual:</th>
+                        <td>{{ galinha.propriedade_atual.nome }}</td>
+                    </tr>
+                    <tr>
+                        <th>Município:</th>
+                        <td>{{ galinha.propriedade_atual.municipio }}</td>
+                    </tr>
+                    <tr>
+                        <th>Proprietário:</th>
+                        <td>{{ galinha.propriedade_atual.usuario.get_full_name|default:galinha.propriedade_atual.usuario.username }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card mb-3">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">Filiação</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-borderless">
+                    <tr>
+                        <th width="40%">Pai:</th>
+                        <td>
+                            {% if galinha.pai %}
+                                <a href="{% url 'core:galinha_detail' galinha.pai.pk %}">
+                                    {{ galinha.pai.numero_registro }} - {{ galinha.pai.nome }}
+                                </a>
+                            {% else %}
+                                <em>Não informado</em>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Mãe:</th>
+                        <td>
+                            {% if galinha.mae %}
+                                <a href="{% url 'core:galinha_detail' galinha.mae.pk %}">
+                                    {{ galinha.mae.numero_registro }} - {{ galinha.mae.nome }}
+                                </a>
+                            {% else %}
+                                <em>Não informado</em>
+                            {% endif %}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        {% if transferencias %}
+        <div class="card">
+            <div class="card-header bg-warning">
+                <h5 class="mb-0">Histórico de Transferências</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>De</th>
+                                <th>Para</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for transferencia in transferencias %}
+                            <tr>
+                                <td>{{ transferencia.data_processamento|date:"d/m/Y H:i" }}</td>
+                                <td>{{ transferencia.origem.nome }}</td>
+                                <td>{{ transferencia.destino.nome }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

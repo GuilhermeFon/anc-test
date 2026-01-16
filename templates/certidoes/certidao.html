@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certidão de Registro - {{ galinha.numero_registro }}</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        
+        body {
+            font-family: 'Times New Roman', serif;
+            font-size: 12pt;
+            line-height: 1.6;
+            color: #000;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            border-bottom: 3px double #000;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            font-size: 24pt;
+            margin: 10px 0;
+            text-transform: uppercase;
+        }
+        
+        .header h2 {
+            font-size: 18pt;
+            margin: 5px 0;
+            font-weight: normal;
+        }
+        
+        .certidao-titulo {
+            text-align: center;
+            font-size: 16pt;
+            font-weight: bold;
+            margin: 30px 0;
+            text-transform: uppercase;
+        }
+        
+        .content {
+            margin: 30px 0;
+        }
+        
+        .section {
+            margin-bottom: 25px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            background: #f9f9f9;
+        }
+        
+        .section-title {
+            font-size: 14pt;
+            font-weight: bold;
+            margin-bottom: 10px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 5px;
+        }
+        
+        .field {
+            margin: 10px 0;
+            padding: 5px 0;
+        }
+        
+        .field-label {
+            font-weight: bold;
+            display: inline-block;
+            width: 200px;
+        }
+        
+        .field-value {
+            display: inline-block;
+        }
+        
+        .footer {
+            margin-top: 50px;
+            text-align: center;
+            font-size: 10pt;
+            border-top: 1px solid #000;
+            padding-top: 20px;
+        }
+        
+        .signature-section {
+            margin-top: 80px;
+            text-align: center;
+        }
+        
+        .signature-line {
+            border-top: 1px solid #000;
+            width: 400px;
+            margin: 0 auto;
+            padding-top: 5px;
+        }
+        
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            
+            body {
+                padding: 0;
+            }
+        }
+        
+        .print-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14pt;
+        }
+        
+        .print-button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <button onclick="window.print()" class="print-button no-print">🖨️ Imprimir</button>
+    
+    <div class="header">
+        <h1>🐔 Cartório Rural de Registro de Galinhas</h1>
+        <h2>Certidão de Registro de Animal</h2>
+        <p>República Federativa do Brasil</p>
+    </div>
+    
+    <div class="certidao-titulo">
+        Certidão de Registro Nº {{ galinha.numero_registro }}
+    </div>
+    
+    <div class="content">
+        <div class="section">
+            <div class="section-title">I - IDENTIFICAÇÃO DO ANIMAL</div>
+            <div class="field">
+                <span class="field-label">Número de Registro:</span>
+                <span class="field-value">{{ galinha.numero_registro }}</span>
+            </div>
+            <div class="field">
+                <span class="field-label">Nome:</span>
+                <span class="field-value">{{ galinha.nome }}</span>
+            </div>
+            <div class="field">
+                <span class="field-label">Sexo:</span>
+                <span class="field-value">{{ galinha.get_sexo_display }}</span>
+            </div>
+            <div class="field">
+                <span class="field-label">Data de Nascimento:</span>
+                <span class="field-value">{{ galinha.data_nascimento|date:"d/m/Y" }}</span>
+            </div>
+            <div class="field">
+                <span class="field-label">Idade:</span>
+                <span class="field-value">{{ galinha.get_idade_anos }} ano(s)</span>
+            </div>
+            <div class="field">
+                <span class="field-label">Raça:</span>
+                <span class="field-value">{{ galinha.raca.nome }}</span>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">II - FILIAÇÃO</div>
+            <div class="field">
+                <span class="field-label">Pai:</span>
+                <span class="field-value">
+                    {% if galinha.pai %}
+                        {{ galinha.pai.numero_registro }} - {{ galinha.pai.nome }}
+                    {% else %}
+                        Não informado
+                    {% endif %}
+                </span>
+            </div>
+            <div class="field">
+                <span class="field-label">Mãe:</span>
+                <span class="field-value">
+                    {% if galinha.mae %}
+                        {{ galinha.mae.numero_registro }} - {{ galinha.mae.nome }}
+                    {% else %}
+                        Não informado
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">III - PROPRIEDADE ATUAL</div>
+            <div class="field">
+                <span class="field-label">Propriedade:</span>
+                <span class="field-value">{{ galinha.propriedade_atual.nome }}</span>
+            </div>
+            <div class="field">
+                <span class="field-label">Município:</span>
+                <span class="field-value">{{ galinha.propriedade_atual.municipio }}</span>
+            </div>
+            <div class="field">
+                <span class="field-label">Proprietário:</span>
+                <span class="field-value">
+                    {{ galinha.propriedade_atual.usuario.get_full_name|default:galinha.propriedade_atual.usuario.username }}
+                </span>
+            </div>
+        </div>
+        
+        {% if transferencias %}
+        <div class="section">
+            <div class="section-title">IV - HISTÓRICO DE TRANSFERÊNCIAS</div>
+            <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+                <thead>
+                    <tr style="border-bottom: 2px solid #333;">
+                        <th style="text-align: left; padding: 5px;">Data</th>
+                        <th style="text-align: left; padding: 5px;">Origem</th>
+                        <th style="text-align: left; padding: 5px;">Destino</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for transferencia in transferencias %}
+                    <tr style="border-bottom: 1px solid #ccc;">
+                        <td style="padding: 5px;">{{ transferencia.data_processamento|date:"d/m/Y" }}</td>
+                        <td style="padding: 5px;">{{ transferencia.origem.nome }}</td>
+                        <td style="padding: 5px;">{{ transferencia.destino.nome }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+    </div>
+    
+    <div class="signature-section">
+        <p><strong>Certifico que as informações acima são verdadeiras e constam dos registros oficiais deste Cartório.</strong></p>
+        <div style="margin-top: 60px;">
+            <div class="signature-line">
+                Oficial do Cartório Rural
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p><strong>Certidão emitida em:</strong> {{ "now"|date:"d/m/Y às H:i" }}</p>
+        <p>Este documento possui validade jurídica conforme legislação vigente.</p>
+        <p><small>Cartório Rural de Registro de Galinhas - Sistema Informatizado</small></p>
+    </div>
+</body>
+</html>

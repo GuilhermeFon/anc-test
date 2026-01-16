@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if object %}Editar{% else %}Nova{% endif %} Galinha - Cartório Rural{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <h1>{% if object %}✏️ Editar Galinha{% else %}➕ Nova Galinha{% endif %}</h1>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {{ form.non_field_errors }}
+                        </div>
+                    {% endif %}
+                    
+                    <div class="mb-3">
+                        {{ form.numero_registro.label_tag }}
+                        {{ form.numero_registro }}
+                        {% if form.numero_registro.errors %}
+                            <div class="text-danger">{{ form.numero_registro.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ form.nome.label_tag }}
+                        {{ form.nome }}
+                        {% if form.nome.errors %}
+                            <div class="text-danger">{{ form.nome.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            {{ form.sexo.label_tag }}
+                            {{ form.sexo }}
+                            {% if form.sexo.errors %}
+                                <div class="text-danger">{{ form.sexo.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            {{ form.data_nascimento.label_tag }}
+                            {{ form.data_nascimento }}
+                            {% if form.data_nascimento.errors %}
+                                <div class="text-danger">{{ form.data_nascimento.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ form.raca.label_tag }}
+                        {{ form.raca }}
+                        {% if form.raca.errors %}
+                            <div class="text-danger">{{ form.raca.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ form.propriedade_atual.label_tag }}
+                        {{ form.propriedade_atual }}
+                        {% if form.propriedade_atual.errors %}
+                            <div class="text-danger">{{ form.propriedade_atual.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <h5 class="mt-4 mb-3">Filiação (Opcional)</h5>
+                    
+                    <div class="mb-3">
+                        {{ form.pai.label_tag }}
+                        {{ form.pai }}
+                        {% if form.pai.errors %}
+                            <div class="text-danger">{{ form.pai.errors }}</div>
+                        {% endif %}
+                        <small class="form-text text-muted">Apenas galinhas machos</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ form.mae.label_tag }}
+                        {{ form.mae }}
+                        {% if form.mae.errors %}
+                            <div class="text-danger">{{ form.mae.errors }}</div>
+                        {% endif %}
+                        <small class="form-text text-muted">Apenas galinhas fêmeas</small>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-success">💾 Salvar</button>
+                        <a href="{% url 'core:galinha_list' %}" class="btn btn-secondary">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

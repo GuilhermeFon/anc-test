@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if object %}Editar{% else %}Nova{% endif %} Raça - Cartório Rural{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <h1>{% if object %}✏️ Editar Raça{% else %}➕ Nova Raça{% endif %}</h1>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        {{ form.nome.label_tag }}
+                        {{ form.nome }}
+                        {% if form.nome.errors %}
+                            <div class="text-danger">{{ form.nome.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <button type="submit" class="btn btn-success">💾 Salvar</button>
+                    <a href="{% url 'core:raca_list' %}" class="btn btn-secondary">Cancelar</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

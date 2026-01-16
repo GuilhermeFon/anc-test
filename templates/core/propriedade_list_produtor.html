@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Minhas Propriedades - Cartório Rural{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>🏡 Minhas Propriedades</h1>
+</div>
+
+{% if propriedades %}
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Nome</th>
+                    <th>Município</th>
+                    <th>Quantidade de Galinhas</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for propriedade in propriedades %}
+                <tr>
+                    <td>{{ propriedade.nome }}</td>
+                    <td>{{ propriedade.municipio }}</td>
+                    <td>{{ propriedade.galinhas.count }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <div class="alert alert-info">
+        Você ainda não possui propriedades cadastradas. Entre em contato com o cartório.
+    </div>
+{% endif %}
+{% endblock %}
